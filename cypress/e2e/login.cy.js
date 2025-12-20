@@ -1,43 +1,52 @@
-describe('Login', () => {
-  
-  it('Deve Realizar Login', function () {
+describe('Login test', () => {
 
-    // Open Site
-    cy.start()
-
-    //Login
-    cy.LoginSucesso('standard_user', 'secret_sauce')
-
-    // Verificando Page
-    cy.get('.app_logo')
-      .should('be.visible')
+  beforeEach(() => {
+    cy.openPage()
+    cy.url().should('include', '/')
   })
 
-  it('Error Email', function () {
+  // --------- Test Login Success --------- 
+  describe('Successfull Login', () => {
 
-    //Open Site
-    cy.start()
+    it('Should login with valid credentials', () => {
 
-    //Login Email Error
-    cy.ErroLogin('matheus', 'secret_sauce')
+      cy.login('standard_user', 'secret_sauce')
 
-    //Message and Error
-    cy.get('[data-test="error"]')
-      .should('be.visible')
+      cy.url().should('include', '/inventory.html')
+
+      cy.get('.app_logo')
+        .should('be.visible')
+        .and('contain.text', 'Swag Labs')
+    })
   })
 
-  // Password Invalida
-  it('Error Password', function () {
+  // --------- Test Login Invalid --------- 
+  describe.only('Invalid Login', () => {
 
-    //Open Site
-    cy.start()
+    it('should not login with unregistered email', () => {
 
-    //Login Password Error
-    cy.ErroLogin('standard_user', '1234')
+      cy.login('test.com', 'secret_sauce')
 
-    //Message and Error
-    cy.get('[data-test="error"]')
-      .should('be.visible')
+      cy.get('[data-test="error"]')
+        .should('be.visible')
+        .and('contain.text', 'Username and password ')
+
+      cy.get('#login-button')
+        .should('be.visible')
+    })
+
+    it('should not login with invalid password', () => {
+
+      cy.login('standard_user', '1234')
+
+      cy.get('[data-test="error"]')
+        .should('be.visible')
+        .and('contain.text', 'Username and password')
+
+      cy.get('#login-button')
+        .should('be.visible')
+    })
   })
+
 })
 
