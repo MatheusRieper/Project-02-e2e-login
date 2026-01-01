@@ -10,7 +10,10 @@ describe('Login test', () => {
 
     it('Should login with valid credentials', () => {
 
-      cy.login('standard_user', 'secret_sauce')
+      cy.login(
+        Cypress.env('ADMIN_USER'),
+        Cypress.env('ADMIN_PASS')
+      )
 
       cy.url().should('include', '/inventory.html')
 
@@ -21,11 +24,17 @@ describe('Login test', () => {
   })
 
   // --------- Test Login Invalid --------- 
-  describe.only('Invalid Login', () => {
+  const INVALID_USER = 'test'
+  const INVALID_PASS = 'password'
+
+  describe('Invalid Login', () => {
 
     it('should not login with unregistered email', () => {
 
-      cy.login('test.com', 'secret_sauce')
+      cy.login(
+        INVALID_USER,
+        Cypress.env('ADMIN_PASS')
+      )
 
       cy.get('[data-test="error"]')
         .should('be.visible')
@@ -37,7 +46,10 @@ describe('Login test', () => {
 
     it('should not login with invalid password', () => {
 
-      cy.login('standard_user', '1234')
+      cy.login(
+        Cypress.env('ADMIN_USER'),
+        INVALID_PASS
+      )
 
       cy.get('[data-test="error"]')
         .should('be.visible')
@@ -49,4 +61,3 @@ describe('Login test', () => {
   })
 
 })
-
