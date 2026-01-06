@@ -1,14 +1,14 @@
-describe('Login test', () => {
+describe('Login test', function () {
 
-  beforeEach(() => {
+  beforeEach( function () {
     cy.openPage()
     cy.url().should('include', '/')
   })
 
   // --------- Test Login Success --------- 
-  describe('Successfull Login', () => {
+  describe('Successfull Login', function () {
 
-    it('Should login with valid credentials', () => {
+    it('Should login with valid credentials', function () {
 
       cy.login(
         Cypress.env('ADMIN_USER'),
@@ -24,39 +24,23 @@ describe('Login test', () => {
   })
 
   // --------- Test Login Invalid --------- 
-  const INVALID_USER = 'test'
-  const INVALID_PASS = 'password'
 
-  describe('Invalid Login', () => {
+  describe('Invalid Login', function () {
 
-    it('should not login with unregistered email', () => {
-
-      cy.login(
-        INVALID_USER,
-        Cypress.env('ADMIN_PASS')
-      )
-
-      cy.get('[data-test="error"]')
-        .should('be.visible')
-        .and('contain.text', 'Username and password ')
-
-      cy.get('#login-button')
-        .should('be.visible')
+    beforeEach( function () {
+      cy.fixture('login').as('login')
     })
 
-    it('should not login with invalid password', () => {
+    it('should not login with unregistered', function () {
 
-      cy.login(
-        Cypress.env('ADMIN_USER'),
-        INVALID_PASS
-      )
+        this.login.invalid.forEach((data) => {
 
-      cy.get('[data-test="error"]')
-        .should('be.visible')
-        .and('contain.text', 'Username and password')
+          cy.login(data.email, data.password)
 
-      cy.get('#login-button')
-        .should('be.visible')
+          cy.contains(data.message).should('be.visible')
+
+          cy.reload()
+        })
     })
   })
 

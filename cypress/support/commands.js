@@ -26,21 +26,25 @@
 
 Cypress.Commands.add('openPage', () => {
 
-    cy.viewport(1440, 900)  
-    cy.visit('https://www.saucedemo.com/') 
+    cy.viewport(1440, 900)
+    cy.visit('https://www.saucedemo.com/')
 })
 
-Cypress.Commands.add('login', (email, senha) => {
+Cypress.Commands.add('login', (email, password) => {
 
-    cy.get('[data-test="username"]')
-        .should('be.visible')
-        .clear()
-        .type(email)
+    if (email) {
+        cy.get('[data-test="username"]').clear().type(email)
+    }
+    else{
+        cy.get('[data-test="username"]').clear()
+    }
 
-    cy.get('[data-test="password"]')
-        .should('be.visible')
-        .clear()
-        .type(senha)
+    if (password) {
+            cy.get('[data-test="password"]').clear().type(password)
+    }
+    else {  
+            cy.get('[data-test="password"]').clear()
+    }
 
     cy.get('[data-test="login-button"]')
         .should('be.visible')

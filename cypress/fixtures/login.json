@@ -1,0 +1,28 @@
+{
+    "invalid": [
+        {
+            "scenario": "email invalido",
+            "email": "email@gmail.com",
+            "password": "secret_sauce",
+            "message": "Username and password"
+        },
+        {
+            "scenario": "password invalida",
+            "email": "problem_user",
+            "password": "pass1234567",
+            "message": "Username and password"
+        },
+        {
+            "scenario": "Campo email vazio",
+            "email": "",
+            "password": "secret_sauce",
+            "message": "Epic sadface: Username is required"
+        },
+        {
+            "scenario": "Campo password vazio",
+            "email": "problem_user",
+            "password": "",
+            "message": "Epic sadface: Password is required"
+        }
+    ]
+}
